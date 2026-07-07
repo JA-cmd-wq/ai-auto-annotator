@@ -1,0 +1,23 @@
+# LocateAnything-3B sidecar 依赖（实测于 Python 3.11 + CUDA 12.4）
+# 版本与教学服务器实测环境一致，请勿随意升级 transformers——
+# 模型的 trust_remote_code 代码对 4.51.x 验证过，新版可能不兼容。
+#
+# 国内安装（清华镜像）：
+#   pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+torch==2.6.0
+torchvision==0.21.0
+transformers==4.51.3
+tokenizers==0.21.4
+accelerate==1.14.0
+safetensors==0.8.0
+huggingface_hub==0.36.2
+sentencepiece==0.2.0
+tiktoken==0.8.0
+einops==0.8.0
+peft==0.19.1
+numpy==1.26.4
+pillow==11.1.0
+opencv-python-headless==4.10.0.84
+packaging==23.2
+requests==2.32.3

@@ -1,0 +1,5 @@
+# 本地运行产生的数据绝不能进镜像（可能有几十 GB 的视频帧和导出包）
+data/
+bin/
+*.log
+engine_python/__pycache__/

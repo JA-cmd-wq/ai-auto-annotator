@@ -1,0 +1,15 @@
+# conda 环境（不用 Docker 的同学走这条路线）
+# 用法：
+#   conda env create -f environment.yml
+#   conda activate annotator
+# 建议先配置清华 conda 镜像（见 DEPLOY.md 第 4 节）
+name: annotator
+channels:
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/main
+  - https://mirrors.tuna.tsinghua.edu.cn/anaconda/pkgs/r
+dependencies:
+  - python=3.11
+  - pip
+  - pip:
+      - --index-url https://pypi.tuna.tsinghua.edu.cn/simple
+      - -r backend/engine_python/requirements.txt

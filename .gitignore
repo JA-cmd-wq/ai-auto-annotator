@@ -1,0 +1,16 @@
+node_modules/
+dist/
+bin/
+.vite/
+data/
+*.db
+*.db-shm
+*.db-wal
+*.zip
+*.log
+.env
+.tools/
+.serena/
+toolchain/
+backend/tmp/
+frontend/.env.local

@@ -1,0 +1,9 @@
+{
+  "name": "ai-auto-annotator-workspace",
+  "private": true,
+  "scripts": {
+    "dev:frontend": "pnpm --dir frontend dev",
+    "build:frontend": "pnpm --dir frontend build",
+    "dev:backend": "cd backend && go run ./cmd/server"
+  }
+}

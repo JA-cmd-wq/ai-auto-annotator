@@ -1,0 +1,52 @@
+# AI Auto Annotator 一键部署（前端 + Go 后端 + GPU 推理 sidecar）
+#
+# 准备工作（详见 DEPLOY.md）：
+#   1. 安装 Docker + docker compose + nvidia-container-toolkit
+#   2. 下载模型权重到 ./models/LocateAnything-3B（或改 MODEL_DIR 指向已有目录）
+# 启动：
+#   docker compose up -d --build
+# 访问：
+#   http://<服务器IP>:5173
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+  backend:
+    build: ./backend
+    environment:
+      APP_ADDR: ":8080"
+      LA_ENGINE: "python"
+      LA_PYTHON_URL: "http://sidecar:8001"
+      # 提示词优化（可选）：不填也能用，只是"生成任务配置"不可用
+      MATPOOL_KEY: "${MATPOOL_KEY:-}"
+      MATPOOL_ENDPOINT: "${MATPOOL_ENDPOINT:-https://token.matpool.com/v1/chat/completions}"
+      MATPOOL_LLM: "${MATPOOL_LLM:-DeepSeek-V4-Pro}"
+    volumes:
+      # backend 与 sidecar 之间传的是文件绝对路径，两边必须挂到同一个容器路径
+      - annotator-data:/app/data
+    restart: unless-stopped
+
+  sidecar:
+    build: ./backend/engine_python
+    environment:
+      LA_MODEL_PATH: /models/LocateAnything-3B
+      LA_GENERATION_MODE: "slow"   # 消费级显卡（无 MagiAttention）只能 slow，见 DEPLOY.md
+    volumes:
+      - annotator-data:/app/data
+      - ${MODEL_DIR:-./models/LocateAnything-3B}:/models/LocateAnything-3B:ro
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+    restart: unless-stopped
+
+volumes:
+  annotator-data:
